@@ -7,11 +7,18 @@ import java.sql.SQLException;
 
 public class GusetOperation {
 	
-	public static ResultSet getGusetList(){
-		ResultSet ret = null;
+	public static String selectAllGuestMess(){
+		String ret = "";
 		String selectSql = "select * from GUEST_TBL";
 		try(PreparedStatement prepsSelectGuest = mainpro.ProjectMain.connection.prepareStatement(selectSql);){
-			ret = prepsSelectGuest.executeQuery();
+			//NOT FINISHHHHHHHHHHHH
+			ResultSet rs = prepsSelectGuest.executeQuery();
+			while(rs.next()) {
+				ret = ret + "Guest's ID is " + rs.getInt(1) + 
+						"\tGuest's name is " + rs.getString(2) +
+						"\tGuest's connection is " + rs.getString(3) +
+						"\tGuest's address is " + rs.getString(4) + "\n";
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

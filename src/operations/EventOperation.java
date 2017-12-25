@@ -20,7 +20,37 @@ public class EventOperation {
 		}
 		
 	}
-	
+	public static ArrayList<Integer> selectAllEventID(){
+		ArrayList<Integer> ret = new ArrayList<>();
+		String selectSql = "SELECT EVENT_ID FROM EVENT_TBL";
+		try(PreparedStatement prepsSelectAllEventID = mainpro.ProjectMain.connection.prepareStatement(selectSql)){
+			ResultSet rs = prepsSelectAllEventID.executeQuery();
+			while(rs.next()) {
+				ret.add(rs.getInt("EVENT_ID"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	public static ArrayList<String> selectAllByEventID(Integer eventID) {
+		ArrayList<String> ret = new ArrayList<>();
+		String selectSql = "select * from EVENT_TBL WHERE EVENT_ID = ?";
+		try(PreparedStatement prepsSelectAllByEventID = mainpro.ProjectMain.connection.prepareStatement(selectSql)){
+			prepsSelectAllByEventID.setInt(1, eventID);
+			ResultSet rs = prepsSelectAllByEventID.executeQuery();
+			rs.next();
+			ret.add(rs.getString("EVENT_ID"));
+			ret.add(rs.getString("EVENT_NAME"));
+			ret.add(rs.getString("BEGIN_TIME"));
+			ret.add(rs.getString("END_TIME")); 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ret;
+	}
 	public static ArrayList<Integer> selectEventIDByDate(String beginTime, String endTime) {
 		ArrayList<Integer> ret = new ArrayList<Integer>();
 		String selectSql = "SELECT EVENT_ID FROM EVENT_TBL WHERE (BEGIN_TIME >= ?) AND (END_TIME <= ?)";
@@ -52,22 +82,7 @@ public class EventOperation {
 		}
 		return ret;
 	}
-	public static ArrayList<Integer> selectEventIDByGuestAmo(Integer left, Integer right){
-		ArrayList<Integer> ret = new ArrayList<>();
-		String selectSql = "SELECT EVENT_ID FROM GUESTLIST GROUP BY EVENT_ID HAVING COUNT(GUEST_ID) BETWEEN ? AND ?";
-		try(PreparedStatement prepsSelectEventIDByGuestAmo = mainpro.ProjectMain.connection.prepareStatement(selectSql)){
-			prepsSelectEventIDByGuestAmo.setInt(1, left);
-			prepsSelectEventIDByGuestAmo.setInt(2, right);
-			ResultSet rs = prepsSelectEventIDByGuestAmo.executeQuery();
-			while(rs.next()) {
-				ret.add(rs.getInt(1));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return ret;
-	}
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
